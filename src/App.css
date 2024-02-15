@@ -1,5 +1,50 @@
+html {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* *,
+*::before,
+*::after {
+  box-sizing: border-box;
+} */
+
+* {
+  box-sizing: inherit;
+  &:before,
+  &:after {
+    box-sizing: inherit;
+  }
+}
+
+:root {
+  --select-border: #777;
+  --select-focus: blue;
+  --select-arrow: var(--select-border);
+  --input-color: #99a3ba;
+  /* --input-border: #a1bae6; */
+  --input-border: #a1bae6;
+  --input-background: #fff;
+  --input-placeholder: #cbd1dc;
+
+  --input-border-focus: #275efe;
+
+  --group-color: var(--input-color);
+  --group-border: var(--input-border);
+  --group-background: #eef4ff;
+
+  --group-color-focus: #fff;
+  --group-border-focus: var(--input-border-focus);
+  --group-background-focus: #678efe;
+}
+
 .App {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  /* background-color: yellow; */
 }
 
 .App-logo {
@@ -32,29 +77,82 @@
   }
 }
 
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  width: 100%;
+  height: fit-content;
+  /* background-color: yellow; */
+}
+
 .MQTTDisplay {
-  margin: 0 auto;
-  max-width: 50em;
-  border-style: solid;
+  margin: 0 50px;
+  width: 30%;
+  height: fit-content;
+  box-shadow: 0 0 10px #3d3d3d;
   text-align: left;
   padding: 1em;
 }
 
 .MQTTSubscription {
+  display: flex;
+  flex-direction: column;
   margin: 0 auto;
-  border-style: solid;
-  border-width: 1px;
-  text-align: left;
   padding: 1em;
+  justify-content: center;
+  align-items: center;
 }
 .MQTTMessage {
   font-size: 0.8em;
 }
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0 10px #3d3d3d;
+  width: 30%;
+  height: 400px;
+  /* background-color: yellow; */
+}
+
+@media only screen and (max-width: 800px) {
+  .right,
+  .MQTTDisplay {
+    width: 80%;
+    margin: 20px;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .right,
+  .MQTTDisplay {
+    width: 95%;
+    margin: 20px;
+  }
+}
+
+h4 {
+  font-size: 20px;
+  color: #333;
+  font-family: monospace;
+}
+.form {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  margin: 5px auto;
+  height: fit-content;
+  justify-content: space-between;
+  /* background-color: skyblue; */
+}
 
 .AuthDisplay {
-  margin: 0 auto;
+  margin: 30px auto;
   max-width: 50em;
-  border-style: solid;
+  box-shadow: 0 0 10px #3d3d3d;
   text-align: left;
   padding: 1em;
 }
@@ -68,3 +166,224 @@
   border-width: 1px;
 }
 
+select {
+  /* A reset of styles, including removing the default dropdown arrow */
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+
+  /* Stack above custom arrow */
+  z-index: 1;
+
+  /* Remove focus outline, will add on alternate element */
+  outline: none;
+}
+
+.select {
+  display: grid;
+  grid-template-areas: "select";
+  align-items: center;
+  position: relative;
+
+  select,
+  &::after {
+    grid-area: select;
+  }
+
+  min-width: 15ch;
+  max-width: 30ch;
+  border: 1px solid var(--select-border);
+  border-radius: 0.25em;
+  padding: 0.25em 0.5em;
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1.1;
+  background-color: #fff;
+  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+}
+
+.select::after {
+  content: "";
+  width: 0.8em;
+  height: 0.5em;
+  background-color: var(--select-arrow);
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  justify-self: end;
+}
+
+.select + label {
+  margin-top: 2rem;
+}
+
+select:focus + .focus {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border: 2px solid var(--select-focus);
+  border-radius: inherit;
+}
+
+label {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-family: monospace;
+}
+.form-group {
+  position: relative;
+  display: flex;
+  width: 100%;
+  & > span,
+  .form-field {
+    white-space: nowrap;
+    display: block;
+    &:not(:first-child):not(:last-child) {
+      border-radius: 0;
+    }
+    &:first-child {
+      border-radius: 6px 0 0 6px;
+    }
+    &:last-child {
+      border-radius: 0 6px 6px 0;
+    }
+    &:not(:first-child) {
+      margin-left: -1px;
+    }
+  }
+  .form-field {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 auto;
+    width: 1%;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  & > span {
+    text-align: center;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 25px;
+    color: var(--group-color);
+    background: var(--group-background);
+    border: 1px solid var(--group-border);
+    transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+  }
+  &:focus-within {
+    & > span {
+      color: var(--group-color-focus);
+      background: var(--group-background-focus);
+      border-color: var(--group-border-focus);
+    }
+  }
+}
+.form-field {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  line-height: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: 6px;
+  -webkit-appearance: none;
+  color: var(--input-color);
+  border: 1px solid #becfeb;
+  background: var(--input-background);
+  transition: border 0.3s ease;
+  &::placeholder {
+    color: var(--input-placeholder);
+  }
+  &:focus {
+    outline: none;
+    border-color: darkcyan;
+  }
+}
+
+@media only screen and (min-width: 460px) {
+  .form-group {
+    width: 38ch;
+  }
+}
+/* BUTTONS */
+
+.btn-center {
+  margin: 40px auto 10px auto;
+}
+
+.btn {
+  font-size: 1rem;
+  text-decoration: none;
+  color: white;
+  background: #333;
+  text-transform: capitalize;
+  padding: 10px 20px;
+  border: none;
+  letter-spacing: 5px;
+  font-family: monospace;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0 0.3);
+  transition: 0.5s;
+}
+
+.btn:hover {
+  cursor: pointer;
+  box-shadow: 0 0.4rem 1.4rem 0 rgba(86, 185, 235, 0.5);
+  transform: translateY(-0.1rem);
+  transition: transform 150ms;
+  background: rgb(3, 139, 230);
+}
+
+.display {
+  margin-top: 20px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #3d3d3d;
+  background: linear-gradient(
+    109.6deg,
+    rgb(36, 45, 57) 11.2%,
+    rgb(16, 37, 60) 51.2%,
+    rgb(0, 0, 0) 98.6%
+  );
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.display h4 {
+  color: #fff;
+  font-size: 20px;
+  font-family: monospace;
+}
+
+.mqtt-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
+  width: 100%;
+}
+.mqtt-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: fit-content;
+  width: 100%;
+  min-height: 150px;
+  box-shadow: 0px 0 4px #3d3d3d;
+  border-radius: 30px 0;
+  /* background-color: #f8f7f7; */
+}
