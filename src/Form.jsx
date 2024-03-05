@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { useGlobalContext } from "./context";
+import ClickToCopy from "./ClickToCopy";
 
 const types = ["eScale", "Sniffer"];
 
-const Form = () => {
+const Form = ({ isConnected }) => {
   const [category, setCategory] = useState("eScale");
   const [name, setName] = useState("");
-  const { cart, vinItems } = useGlobalContext();
+  const { cart, saveItem, vinItems } = useGlobalContext();
 
   const submitForm = (e) => {
     e.preventDefault();
     let random = Math.floor(Math.random() * 1000);
     let randomDate = Date.now();
-    let dbName = `${name}${randomDate}${random}`;
+    let dbName = `${"eGas"}/${name}${randomDate}${random}`;
     const formData = {
       category,
       name,
@@ -66,6 +67,10 @@ const Form = () => {
           </button>
         </div>
       </form>
+      {saveItem.length > 0 && isConnected && !cart.status && (
+        <ClickToCopy isConnected={isConnected} />
+      )}
+      {cart.status && <ClickToCopy isConnected={isConnected} />}
     </div>
   );
 };

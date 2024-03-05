@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import AWSConfiguration from "./aws-iot-configuration.js";
 import { Auth } from "aws-amplify";
 import AWSIoTData from "aws-iot-device-sdk";
-
 import Display from "./Display.jsx";
 
 const MQTTSubscription = (props) => {
-  const [isConnected, setIsConnected] = useState(false);
+  // const [isConnected, setIsConnected] = useState(false);
   const [mqttClient, setMqttClient] = useState();
   const [messages, setMessages] = useState();
 
@@ -39,15 +38,16 @@ const MQTTSubscription = (props) => {
       accessKeyId: essentialCredentials.accessKeyId,
       secretKey: essentialCredentials.secretAccessKey,
       sessionToken: essentialCredentials.sessionToken,
-      });
-      console.log(
+    });
+
+    console.log(
       "Subscriber trying to connect to AWS IoT for clientId:",
       clientId
     );
 
     // On connect, update status
     newMqttClient.on("connect", function () {
-      setIsConnected(true);
+      props.setIsConnected(true);
       newMqttClient.subscribe(props.topic);
       console.log("Connected to AWS IoT for clientId:", clientId);
       console.log(`Subscribed to ${props.topic}`);
@@ -55,14 +55,10 @@ const MQTTSubscription = (props) => {
 
     // add event handler for received messages
     newMqttClient.on("message", function (topic, payload) {
-      // let myDate = `${new Date().toLocaleDateString()}${new Date().toLocaleTimeString()}`;
-      // let newMessage = `${myDate} - topic '${topic}' - \n ${payload.toString()}`;
       let rawMessage = payload.toString();
-      //   let newMessage = JSON.parse(payload);
-      let newMessage = rawMessage.split(":")[1];
-      let finalMsg = newMessage.split("}")[0];
-      setMessages(finalMsg);
-      // console.log(finalMsg);
+      let parseMessage = JSON.parse(rawMessage);
+      setMessages(parseMessage.sensor_a0);
+      // console.log(parseMessage.sensor_a0);
     });
     // update state to track mqtt client
     setMqttClient(newMqttClient);
@@ -75,7 +71,7 @@ const MQTTSubscription = (props) => {
     // but I received an erropr when I tried it. I might be doing something wrong but for now, it works with the commands
     // below...
     mqttClient.end(false);
-    setIsConnected(false);
+    props.setIsConnected(false);
     // remove subscription from parent component, thus killing this component...
     props.removeSubscription(props.topic);
   }
@@ -83,12 +79,15 @@ const MQTTSubscription = (props) => {
   return (
     <div className="MQTTSubscription">
       <h4>
-        Status: "{props.topic}" ({isConnected ? "connected" : "not connected"})
+        Status: "{props.sofTopicDisplay}" (
+        {props.isConnected ? "connected" : "not connected"})
       </h4>
       <form onSubmit={handleUnsubscribe}>
-        <button className="btn" type="submit">
-          Unsubscribe
-        </button>
+        {props.isConnected && (
+          <button className="btn" type="submit">
+            Unsubscribe
+          </button>
+        )}
       </form>
       <Display message={messages} />
     </div>

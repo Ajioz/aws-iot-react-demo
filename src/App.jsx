@@ -1,21 +1,21 @@
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
 import { withAuthenticator } from "aws-amplify-react";
 import MQTTDisplay from "./MQTTDisplay";
 import Form from "./Form";
 
-// import AuthDisplay from './AuthDisplay';
-// import Display from "./Display";
-// import logo from "./logo.svg";
-
 function App(props) {
+  const [isConnected, setIsConnected] = useState(false);
   return (
     <div className="App">
       <div className="container">
-        <MQTTDisplay {...props} />
-        <Form />
+        <MQTTDisplay
+          {...props}
+          setIsConnected={setIsConnected}
+          isConnected={isConnected}
+        />
+        <Form isConnected={isConnected} />
       </div>
-      {/* <AuthDisplay {...props} /> */}
     </div>
   );
 }

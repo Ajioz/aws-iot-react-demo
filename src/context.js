@@ -5,8 +5,8 @@ const AppContext = React.createContext();
 
 /* 
   const viniScale = [
-    { category: "eScale", name: "Name", dbName: "dbName" }, 
-    { category: "eScale", name: "Name", dbName: "dbName" }
+    { category: "eScale",  name: "Name", dbName: "dbName" }, 
+    { category: "sniffer", name: "Name", dbName: "dbName" }
   ]; 
 */
 
@@ -16,7 +16,7 @@ const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState({ status: false });
   const [saveItem, setSaveItem] = useState(data);
-
+  
   const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
@@ -27,7 +27,7 @@ const AppProvider = ({ children }) => {
       setLoading(false);
     }
   }, [cart]);
-  
+
   useEffect(() => {
     fetchItems();
     let parsedItem = [];
@@ -36,6 +36,7 @@ const AppProvider = ({ children }) => {
       if (parsedItem.length > 1) return setCart({ ...cart, status: true });
       else return setCart({ ...cart, status: false });
     }
+    setSaveItem(data);
   }, [saveItem]);
 
   const vinItems = (obj) => {
@@ -44,7 +45,9 @@ const AppProvider = ({ children }) => {
     if (getArray.length !== 0) {
       newArray = JSON.parse(getArray);
     }
-    localStorage.setItem("viniScale", JSON.stringify([...newArray, obj]));
+    if (Object.keys(obj).length !== 0) {
+      localStorage.setItem("viniScale", JSON.stringify([...newArray, obj]));
+    }
     setSaveItem(JSON.stringify([...newArray, obj]));
   };
 
