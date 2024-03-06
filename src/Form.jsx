@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useGlobalContext } from "./context";
 import ClickToCopy from "./ClickToCopy";
+import Instruction from "./Instruction";
 
 const types = ["eScale", "Sniffer"];
 
@@ -67,10 +68,19 @@ const Form = ({ isConnected }) => {
           </button>
         </div>
       </form>
+
       {saveItem.length > 0 && isConnected && !cart.status && (
-        <ClickToCopy isConnected={isConnected} />
+        <>
+          <Instruction />
+          <ClickToCopy isConnected={isConnected} />
+        </>
       )}
-      {cart.status && <ClickToCopy isConnected={isConnected} />}
+      {cart.status && (
+        <>
+          <Instruction />
+          <ClickToCopy isConnected={isConnected} />
+        </>
+      )}
     </div>
   );
 };

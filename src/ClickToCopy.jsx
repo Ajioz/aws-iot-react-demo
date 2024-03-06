@@ -33,7 +33,7 @@ const ClickToCopy = () => {
   return (
     <div className="copyTab">
       <p style={{ fontSize: "10px", color: "darkred" }}>
-        Registered Device(s) unique code. Copy to program device!
+        Registered Device(s) ConnectID
       </p>
       <form>
         <div className="form-group">
